@@ -6,7 +6,7 @@ let storage = path.resolve(__dirname,  'database.sqlite3');
 const config = {
   dialect: "sqlite",
   storage: storage,
-  logging: console.log
+  logging: false
 };
 
 console.log(config)

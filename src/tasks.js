@@ -12,22 +12,26 @@ const fetchTeamDrives = async () => {
 
   while (true) {
     const data = await drive.list(pageToken);
-    if (data.nextPageToken) {
-      pageToken = data.nextPageToken;
-    } else {
-      break;
-    }
 
     for(let i = 0; i < data.items.length; i ++) {
       const item = data.items[i];
       const teamDrive = await TeamDrive.findOne({where: {id: item.id}});
       if(!teamDrive) {
+        if (item.name.indexOf('::') < 0) {
+          continue;
+        }
         await TeamDrive.create({
           id: item.id,
           kind: item.kind,
           name: item.name
         });
       }
+    }
+
+    if (data.nextPageToken) {
+      pageToken = data.nextPageToken;
+    } else {
+      break;
     }
   }
 };
@@ -46,12 +50,6 @@ async function fetchFilesFromTeamDrive(driveClient, teamDrive) {
     };
     const data = await driveClient.files(parameters);
 
-    if (data.nextPageToken) {
-      pageToken = data.nextPageToken;
-    } else {
-      break;
-    }
-
     for (let i = 0; i < data.items.length; i++) {
       const item = data.items[i];
 
@@ -67,15 +65,22 @@ async function fetchFilesFromTeamDrive(driveClient, teamDrive) {
         })
       }
     }
+
+    if (data.nextPageToken) {
+      pageToken = data.nextPageToken;
+    } else {
+      break;
+    }
   }
 }
 
 const fetchFiles = async () => {
   const driveClient = await createDriveClient();
 
-  const teamDrives = (await TeamDrive.findAll());
+  const teamDrives = (await TeamDrive.findAll({order: ['name']}));
   for(let i = 0; i < teamDrives.length; i ++) {
-    await fetchFilesFromTeamDrive(driveClient, teamDrives[i]);
+    let drive = teamDrives[i];
+    await fetchFilesFromTeamDrive(driveClient, drive);
   }
 };
 
