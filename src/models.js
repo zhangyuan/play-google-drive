@@ -10,6 +10,19 @@ const TeamDrive = sequelize.define('drives', {
   kind: DataTypes.STRING
 });
 
+const DriveFile = sequelize.define('files', {
+  id: {
+    primaryKey: true,
+    type: DataTypes.STRING
+  },
+  kind: DataTypes.STRING,
+  title: DataTypes.STRING,
+  teamDriveId: DataTypes.STRING,
+  createdDate: DataTypes.DATE,
+  modifiedDate: DataTypes.DATE,
+});
+
 module.exports = {
-  TeamDrive
+  TeamDrive,
+  DriveFile
 };

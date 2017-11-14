@@ -5,7 +5,7 @@ const _ = require('koa-route');
 const queryString = require('query-string');
 const session = require('koa-session');
 
-const fs = require('fs');
+const path = require('path');
 
 const Drive = require('./drive').Drive;
 const {createOAuth2Client, getAccessToken} = require('./oauth');
@@ -39,7 +39,7 @@ app.use(_.get('/auth/callback', async (ctx) => {
         access_token: accessToken
     };
 
-    await saveFile('./access-token.json', JSON.stringify(accessToken, null, 4));
+    await saveFile(path.resolve(__dirname, 'access-token.json'), JSON.stringify(accessToken, null, 4));
 }));
 
 app.use(_.get('/api/self', (ctx) => {
