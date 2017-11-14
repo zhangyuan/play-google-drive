@@ -22,7 +22,22 @@ const readFile = async (filename) => {
   })
 };
 
+const fileExists = async(filename) => {
+  return new Promise((resolve, reject) => {
+    fs.access(filename, fs.constants.F_OK, (err) => {
+      if(err) {
+        if (err.code === 'ENOENT') {
+          return resolve(false);
+        }
+        return reject(err);
+      }
+      return resolve(true);
+    });
+  });
+};
+
 module.exports = {
   readFile,
-  saveFile
+  saveFile,
+  fileExists
 };

@@ -1,5 +1,6 @@
 client-secret.json
-access-token.json
+tokens.json
+refresh-tokens.json
 node_modules
 .idea/
 database.sqlite3

@@ -10,7 +10,7 @@ const createOAuth2Client = () => {
     );
 };
 
-const getAccessToken = (oauth2Client, code) => {
+const getTokensByCode = (oauth2Client, code) => {
     return new Promise((resolve, reject) => {
         oauth2Client.getToken(code, (err, tokens) => {
             if(err) {
@@ -21,7 +21,19 @@ const getAccessToken = (oauth2Client, code) => {
     })
 };
 
+const refreshTokens = (oauth2Client) => {
+  return new Promise((resolve, reject) => {
+    oauth2Client.refreshAccessToken((err, tokens) => {
+      if(err) {
+        return reject(err);
+      }
+      return resolve(tokens);
+    })
+  })
+};
+
 module.exports = {
-    createOAuth2Client,
-    getAccessToken
+  createOAuth2Client,
+  refreshTokens,
+  getTokensByCode
 };

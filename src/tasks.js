@@ -80,11 +80,11 @@ const fetchFiles = async () => {
 };
 
 async function createDriveClient() {
-  let jsonString = await readFile(path.resolve(__dirname, './access-token.json'));
-  const accessToken = JSON.parse(jsonString);
+  let jsonString = await readFile(path.resolve(__dirname, './tokens.json'));
+  const tokens = JSON.parse(jsonString);
 
   const oauth2Client = createOAuth2Client();
-  oauth2Client.setCredentials(accessToken);
+  oauth2Client.setCredentials(tokens);
   return new Drive(oauth2Client);
 }
 
