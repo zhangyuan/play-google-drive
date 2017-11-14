@@ -8,7 +8,7 @@ const createOAuth2Client = () => {
         clientSecret.web.client_secret,
         'http://localhost:9999/auth/callback'
     );
-}
+};
 
 const getAccessToken = (oauth2Client, code) => {
     return new Promise((resolve, reject) => {
@@ -19,9 +19,9 @@ const getAccessToken = (oauth2Client, code) => {
             return resolve(tokens);
         })
     })
-}
+};
 
 module.exports = {
     createOAuth2Client,
     getAccessToken
-}
+};

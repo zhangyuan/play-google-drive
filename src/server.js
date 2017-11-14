@@ -3,11 +3,13 @@ const app = new Koa();
 const _ = require('koa-route');
 
 const queryString = require('query-string');
-var google = require('googleapis');
 const session = require('koa-session');
+
+const fs = require('fs');
 
 const Drive = require('./drive').Drive;
 const {createOAuth2Client, getAccessToken} = require('./oauth');
+const { saveFile, readFile } = require('./helpers');
 
 app.keys = ['some secret hurr'];
 app.use(session({}, app));
@@ -29,17 +31,19 @@ app.use(_.get('/auth/callback', async (ctx) => {
     const querystring = ctx.request.querystring;
     const parsed = queryString.parse(querystring);
     const code = parsed.code;
-    const oauth2Client =  createOAuth2Client()
+    const oauth2Client =  createOAuth2Client();
     const accessToken = await getAccessToken(oauth2Client, code);
-    ctx.session.accessToken = accessToken
+    ctx.session.accessToken = accessToken;
 
     ctx.body = {
         access_token: accessToken
-    }
+    };
+
+    await saveFile('./access-token.json', JSON.stringify(accessToken, null, 4));
 }));
 
 app.use(_.get('/api/self', (ctx) => {
-    const accessToken = ctx.session.accessToken
+    const accessToken = ctx.session.accessToken;
     ctx.body = {
         access_token: accessToken
     }
@@ -53,7 +57,5 @@ app.use(_.get('/api/teamdrives', async (ctx) => {
     const response = await drive.list();
     ctx.body = response;
 }));
-
-
 
 app.listen(parseInt(process.env.PORT) || 9999);

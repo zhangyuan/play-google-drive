@@ -1,2 +1,4 @@
-/client-secret.json
-/node_modules
+client-secret.json
+access-token.json
+node_modules
+.idea/
