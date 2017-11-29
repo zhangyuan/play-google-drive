@@ -11,7 +11,7 @@ const fetchTeamDrives = async () => {
   let pageToken = null;
 
   while (true) {
-    const data = await drive.list(pageToken);
+    const data = await drive.listTeamDrives({pageToken});
 
     for(let i = 0; i < data.items.length; i ++) {
       const item = data.items[i];
@@ -84,6 +84,12 @@ const fetchFiles = async () => {
   }
 };
 
+const listAppScripts = async () => {
+  const driveClient = await createDriveClient();
+  const data = await driveClient.files({q: "mimeType='application/vnd.google-apps.script'"})
+  console.log(JSON.stringify(data))
+};
+
 async function createDriveClient() {
   let jsonString = await readFile(path.resolve(__dirname, './tokens.json'));
   const tokens = JSON.parse(jsonString);
@@ -95,7 +101,8 @@ async function createDriveClient() {
 
 const tasks = {
   fetchFiles,
-  fetchTeamDrives
+  fetchTeamDrives,
+  listAppScripts
 };
 
 (async() => {

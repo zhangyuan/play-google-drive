@@ -4,3 +4,5 @@ refresh-tokens.json
 node_modules
 .idea/
 *.sqlite3
+tmp/*
+!tmp/.gitkeep

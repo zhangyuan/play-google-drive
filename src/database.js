@@ -9,8 +9,6 @@ const config = {
   logging: false
 };
 
-console.log(config)
-
 const sequelize = new Sequelize(config);
 
 module.exports = {

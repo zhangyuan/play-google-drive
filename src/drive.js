@@ -6,7 +6,7 @@ class Drive {
         this.oauth2Client = oauth2Client
     }
 
-    async files (options = {}) {
+    async files (parameters = {}) {
       await this.refreshTokensIfNecessary();
       return new Promise((resolve, reject) => {
 
@@ -14,8 +14,7 @@ class Drive {
           version: 'v2',
           auth: this.oauth2Client
         });
-
-        drive.files.list(options, (err, resp) => {
+        drive.files.list(parameters, (err, resp) => {
             if(err) {
                 return reject(err);
             }
@@ -34,16 +33,17 @@ class Drive {
       }
     }
 
-    async list (pageToken = null) {
+    async listTeamDrives (params = {pageToken: null}, options = {}) {
       await this.refreshTokensIfNecessary();
       return new Promise((resolve, reject) => {
           const drive = google.drive({
               version: 'v2',
               auth: this.oauth2Client
           });
-          drive.teamdrives.list({
-            pageToken: pageToken
-          }, function (err, resp) {
+          drive.teamdrives.list(
+            params,
+            options,
+            function (err, resp) {
               if(err) {
                   return reject(err)
               }

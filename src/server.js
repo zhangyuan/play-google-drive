@@ -16,7 +16,8 @@ app.keys = ['some secret hurr'];
 app.use(session({}, app));
 
 const scopes = [
-  'https://www.googleapis.com/auth/drive'
+  'https://www.googleapis.com/auth/drive',
+  'https://www.googleapis.com/auth/drive.scripts'
 ];
 
 app.use(_.get('/auth/authorize', async (ctx) => {
